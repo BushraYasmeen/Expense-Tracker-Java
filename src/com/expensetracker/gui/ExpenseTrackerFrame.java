@@ -29,6 +29,9 @@ public class ExpenseTrackerFrame extends JFrame {
         setTitle("Expense Tracker");
         setSize(600, 500);
         setLayout(null);
+        getContentPane().setBackground(new java.awt.Color(232, 245, 233));
+       
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // ===== Labels & Fields =====
@@ -67,10 +70,15 @@ public class ExpenseTrackerFrame extends JFrame {
 
         addButton = new JButton("Add Expense");
         addButton.setBounds(120, 200, 150, 30);
+        addButton.setBackground(new java.awt.Color(46, 125, 50));
+        addButton.setForeground(java.awt.Color.WHITE);
         add(addButton);
         
         deleteButton = new JButton("Delete Selected");
         deleteButton.setBounds(300, 200, 150, 30);
+        deleteButton.setBackground(new java.awt.Color(198, 40, 40));
+        deleteButton.setForeground(java.awt.Color.WHITE);
+
         add(deleteButton);
 
 
