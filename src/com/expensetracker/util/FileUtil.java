@@ -53,6 +53,26 @@ public class FileUtil {
 
         return expenses;
     }
+    
+    public static void deleteExpense(int indexToDelete) {
+
+        List<Expense> expenses = getAllExpenses();
+
+        if (indexToDelete >= 0 && indexToDelete < expenses.size()) {
+            expenses.remove(indexToDelete);
+        }
+
+        try (FileWriter fw = new FileWriter(FILE_NAME, false)) {
+
+            for (Expense e : expenses) {
+                fw.write(e.toString() + "\n");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 

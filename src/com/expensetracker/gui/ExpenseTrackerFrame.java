@@ -14,7 +14,7 @@ import java.util.List;
 public class ExpenseTrackerFrame extends JFrame {
 
     JTextField titleField, amountField, categoryField, dateField;
-    JButton addButton;
+    JButton addButton,deleteButton;
 
     JTable table;
     DefaultTableModel tableModel;
@@ -65,6 +65,11 @@ public class ExpenseTrackerFrame extends JFrame {
         addButton = new JButton("Add Expense");
         addButton.setBounds(120, 200, 150, 30);
         add(addButton);
+        
+        deleteButton = new JButton("Delete Selected");
+        deleteButton.setBounds(300, 200, 150, 30);
+        add(deleteButton);
+
 
         // ===== Table =====
 
@@ -113,6 +118,25 @@ public class ExpenseTrackerFrame extends JFrame {
                 }
             }
         });
+        
+        deleteButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                int selectedRow = table.getSelectedRow();
+
+                if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(null, "Select a row to delete!");
+                    return;
+                }
+
+                FileUtil.deleteExpense(selectedRow);
+
+                loadExpensesToTable();
+
+                JOptionPane.showMessageDialog(null, "Expense Deleted!");
+            }
+        });
+
 
         setVisible(true);
     }
