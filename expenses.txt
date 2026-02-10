@@ -1,0 +1,4 @@
+Travelling,50000.0,Food,2-10-25
+Travelling,50000.0,Food,2-10-25
+Travelling,50000.0,Food,2-10-25
+School trip,20000.0,mountains,10-02-2026

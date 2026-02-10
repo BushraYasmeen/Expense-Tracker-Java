@@ -1,26 +1,34 @@
 package com.expensetracker.gui;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import com.expensetracker.model.Expense;
 import com.expensetracker.service.ExpenseService;
+import com.expensetracker.util.FileUtil;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ExpenseTrackerFrame extends JFrame {
 
     JTextField titleField, amountField, categoryField, dateField;
     JButton addButton;
 
+    JTable table;
+    DefaultTableModel tableModel;
+
     ExpenseService service = new ExpenseService();
 
     public ExpenseTrackerFrame() {
 
         setTitle("Expense Tracker");
-        setSize(400, 300);
+        setSize(600, 450);
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // ===== Labels & Fields =====
 
         JLabel titleLabel = new JLabel("Title:");
         titleLabel.setBounds(30, 30, 100, 25);
@@ -58,22 +66,72 @@ public class ExpenseTrackerFrame extends JFrame {
         addButton.setBounds(120, 200, 150, 30);
         add(addButton);
 
+        // ===== Table =====
+
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn("Title");
+        tableModel.addColumn("Amount");
+        tableModel.addColumn("Category");
+        tableModel.addColumn("Date");
+
+        table = new JTable(tableModel);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(30, 250, 520, 150);
+        add(scrollPane);
+
+        // ===== Load Existing Data =====
+        loadExpensesToTable();
+
+        // ===== Button Click =====
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                String title = titleField.getText();
-                double amount = Double.parseDouble(amountField.getText());
-                String category = categoryField.getText();
-                String date = dateField.getText();
+                try {
 
-                Expense expense = new Expense(title, amount, category, date);
-                service.addExpense(expense);
+                    String title = titleField.getText();
+                    double amount = Double.parseDouble(amountField.getText());
+                    String category = categoryField.getText();
+                    String date = dateField.getText();
 
-                JOptionPane.showMessageDialog(null, "Expense Added!");
+                    Expense expense = new Expense(title, amount, category, date);
+                    service.addExpense(expense);
+
+                    JOptionPane.showMessageDialog(null, "Expense Added!");
+
+                    // Refresh Table
+                    loadExpensesToTable();
+
+                    // Clear Fields
+                    titleField.setText("");
+                    amountField.setText("");
+                    categoryField.setText("");
+                    dateField.setText("");
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Enter valid data!");
+                }
             }
         });
 
         setVisible(true);
+    }
+
+    // ===== Load Data Method =====
+    private void loadExpensesToTable() {
+
+        tableModel.setRowCount(0); // Clear old data
+
+        List<Expense> expenses = FileUtil.getAllExpenses();
+
+        for (Expense e : expenses) {
+            tableModel.addRow(new Object[]{
+                    e.getTitle(),
+                    e.getAmount(),
+                    e.getCategory(),
+                    e.getDate()
+            });
+        }
     }
 }
 
