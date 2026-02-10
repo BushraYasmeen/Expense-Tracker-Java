@@ -15,6 +15,9 @@ public class ExpenseTrackerFrame extends JFrame {
 
     JTextField titleField, amountField, categoryField, dateField;
     JButton addButton,deleteButton;
+    
+    JLabel totalLabel;
+    
 
     JTable table;
     DefaultTableModel tableModel;
@@ -24,7 +27,7 @@ public class ExpenseTrackerFrame extends JFrame {
     public ExpenseTrackerFrame() {
 
         setTitle("Expense Tracker");
-        setSize(600, 450);
+        setSize(600, 500);
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -84,9 +87,15 @@ public class ExpenseTrackerFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(30, 250, 520, 150);
         add(scrollPane);
+        
+        totalLabel = new JLabel("Total Expense: ₹ 0");
+        totalLabel.setBounds(30, 410, 300, 25);
+        add(totalLabel);
+
 
         // ===== Load Existing Data =====
         loadExpensesToTable();
+        updateTotalExpense(); 
 
         // ===== Button Click =====
         addButton.addActionListener(new ActionListener() {
@@ -154,8 +163,24 @@ public class ExpenseTrackerFrame extends JFrame {
                     e.getAmount(),
                     e.getCategory(),
                     e.getDate()
-            });
+            });  
+            
         }
+        
     }
+    private void updateTotalExpense() {
+
+        double total = 0;
+
+        java.util.List<Expense> expenses = FileUtil.getAllExpenses();
+
+        for (Expense e : expenses) {
+            total += e.getAmount();
+        }
+
+        totalLabel.setText("Total Expense: ₹ " + total);
+    }
+
+    
 }
 
